@@ -1,20 +1,42 @@
-# if命令
+# 条件表达式
+
+```
+if(cond)
+elseif(cond)
+while(cond)
+```
+
+求值优先级：
+
+1. 内部嵌套的`()`
+2. 一元测试：EXISTS, COMMAND, DEFINED等
+3. 二元测试：EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL等
+4. NOT
+5. AND
+6. OR
+
+一个条件表达式可由基本的逻辑常量表达式，或复合的逻辑条件表达式组成。
 
 ## 基本表达式
 
 ```cmake
-if(<unquoted_constant | unquoted_variable | "quoted_string(empty or non-empty)">)
+if(<unquoted_constant>)
 ```
 
-- 不带双引号的逻辑常量(unquoted_constants)：
-  - 逻辑负的常量：0, FALSE, NO, N, OFF, IGNORE, -NOTFOUND, 空字符串(unquoted)
-  - 逻辑正的常量：非零整数，TRUE, YES, Y, ON
+- 不带双引号的逻辑常量(unquoted_constants)：大小写不敏感
+  - 逻辑负的常量：0, FALSE, NO, N, OFF, IGNORE, -NOTFOUND结尾的字符串, 空字符串 => false
+  - 逻辑正的常量：非零整数，TRUE, YES, Y, ON => true
+
+```cmake
+if(<unquoted_variable|quoted_string>)
+```
+
 - 不带双引号的变量(unquoted_variables)：
-  - 如果该变量的值为逻辑负 => false
-  - 如果该变量的值为逻辑正 => true
+  - 如果该变量的**值**为逻辑负的常量值 => false
+  - 否则 => true
 - 带双引号的字符串 => false
 
-特殊地，**不带双引号的、且未定义的变量**，其值为""，所以为false. 
+特殊地，**不带双引号的、且未定义的变量**，其值为空字符串，所以为false. 
 
 ```cmake
 macro(assert_true exp)
@@ -28,23 +50,6 @@ macro(assert_false exp)
     message(FATAL_ERROR "expect ${exp} be false, but got true")
   endif()
 endmacro()
-
-## unquoted constant(1, TRUE, YES, Y, ON) => true
-assert_true(1 AND 2)
-assert_true(TRUE AND True AND true)
-assert_true(YES AND Yes AND yes)
-assert_true(Y AND y)
-assert_true(ON AND on AND On)
-
-## unquoted constant(0, FALSE, NO, N, OFF, IGNORE, -NOTFOUND, "") => false
-assert_false(0)
-assert_false(false OR False OR FALSE)
-assert_false(No OR no OR NO)
-assert_false(N OR n)
-assert_false(OFF OR off OR Off)
-
-assert_false(IGNORE OR Ignore OR ignore)
-assert_false(NOTFOUND OR NotFound OR notfound)
 
 ## unquoted variable: (N, false, off, "") => false
 set(var N)
@@ -87,23 +92,28 @@ set(defined_var "non-empty-value")
 assert_false(${defined_var})
 ```
 
+```cmake
+set(var1 OFF)
+set(var2 "var1")
+if(${var2}) # => false
+if(var2)    # => true
+```
+
 ## 逻辑操作符
 
 ```cmake
-# Logical operators
-if(NOT expr)
-if(expre AND expre)
-if(expre OR expre)
-
-# Example with parentheses
-if(NOT (expre AND (expre OR expre)))
+if(NOT <cond>)
+if(<cond1> AND <cond2>)
+if(<cond1> OR <cond2>)
 ```
 
 ## 比较测试
 
 ```cmake
-if(value1 OPERATOR value2)
+if(<unquoted_variable|quoted_string> OPERATOR <unquoted_variable|quoted_string>)
 ```
+
+如果使用`unquoted_variable`，则自动使用变量的值。操作符包括如下三类：
 
 - Numeric: LESS, GREATER, EQUAL, LESS_EQUAL, GREATER_EQUAL
 - String: STRLESS, STRGREATER, STREQUAL, STRLESS_EQUAL, STRGREATER_EQUAL
@@ -117,6 +127,7 @@ if(2 GREATER 1)
 if("23" EQUAL 23)
 
 set(val 42)
+if(val EQUAL 42)
 if(${val} EQUAL 42)
 if("${val}" EQUAL 42)
 ```
@@ -134,7 +145,7 @@ if(1.8.2 VERSION_LESS 2 )
 ## 正则匹配
 
 ```cmake
-if(value MATCHES regex)
+if(<unquoted_variable|quoted_string> MATCHES regex)
 ```
 
 例1：
@@ -148,9 +159,9 @@ endif()
 ## 文件测试
 
 ```cmake
-if(EXISTS pathToFileOrDir)
-if(IS_DIRECTORY pathToDir)
-if(IS_SYMLINK fileName)
+if(EXISTS path-to-file-or-directory)
+if(IS_DIRECTORY path-to-directory)
+if(IS_SYMLINK file-name)
 if(IS_ABSOLUTE path)
 if(file1 IS_NEWER_THAN file2)
 ```
@@ -172,6 +183,8 @@ if(DEFINED var)
 if(DEFINED ENV{var})
 ```
 
+## 包含测试
 
-
-
+```cmake
+if(<unquoted_variable|quoted_string> IN_LIST list-var)
+```

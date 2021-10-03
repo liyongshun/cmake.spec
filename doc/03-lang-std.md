@@ -1,8 +1,8 @@
 # 语言标准
 
-## 指定project或target的语言标准
+## 指定project的语言标准
 
-指定项目的语言标准。
+指定项目的语言标准，将设置范围内所有Target语言标准的默认属性。
 
 ```cmake
 set(CMAKE_CXX_STANDARD 11) 
@@ -10,13 +10,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 ```
 
+## set_target_properties：设置target的默认属性
+
 指定特定target的语言标准，但不具备target依赖传递能力。
 
 ```cmake
 set_target_properties(foo PROPERTIES 
-  C_STANDARD 99 
-  C_STANDARD_REQUIRED ON 
-  C_EXTENSIONS OFF
+  CXX_STANDARD 11 
+  CXX_STANDARD_REQUIRED ON 
+  CXX_EXTENSIONS OFF
 )
 ```
 
