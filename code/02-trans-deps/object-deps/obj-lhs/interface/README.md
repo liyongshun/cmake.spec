@@ -13,7 +13,7 @@
    foo.INTERFACE_INCLUDE_DIRECTORIES = "foo/include"
    foo.COMPILE_DEFINITIONS = <NOTFOUND>
    foo.INTERFACE_COMPILE_DEFINITIONS = <NOTFOUND>
-   foo.LINK_LIBRARIES = "bar"
+   foo.LINK_LIBRARIES = <NOTFOUND>
    foo.INTERFACE_LINK_LIBRARIES = "bar"
  Properties for TARGET main:
    main.INCLUDE_DIRECTORIES = <NOTFOUND>
@@ -36,7 +36,7 @@ $ cc -fPIC -shared -Wl,-soname,libbar.so -o build/bar/libbar.so build/bar/src/ba
 ```
 
 ```
-$ cc -DINTERFACE_BAR=2 -DPUBLIC_BAR=1 -Ifoo/include -Ifoo/src -Ibar/include  -std=c99 -o build/foo/src/foo.c.o -c foo/src/foo.c
+$ cc -Ifoo/include -Ifoo/src  -std=c99 -o build/foo/src/foo.c.o   -c foo/src/foo.c
 ```
 
 ```

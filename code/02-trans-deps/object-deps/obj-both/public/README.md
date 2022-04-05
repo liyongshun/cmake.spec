@@ -20,7 +20,7 @@
    main.INTERFACE_INCLUDE_DIRECTORIES = <NOTFOUND>
    main.COMPILE_DEFINITIONS = <NOTFOUND>
    main.INTERFACE_COMPILE_DEFINITIONS = <NOTFOUND>
-   main.LINK_LIBRARIES = "foo"
+   main.LINK_LIBRARIES = "foo;bar"
    main.INTERFACE_LINK_LIBRARIES = <NOTFOUND>
 ```
 
@@ -31,15 +31,14 @@ $ mkdir -p build/{bar/src,foo/src,main}
 ```
 
 ```
-$ cc -DPRIVATE_BAR=3 -DPUBLIC_BAR=1 -Dbar_EXPORTS -Ibar/include -Ibar/src  -fPIC -std=c99 -o build/bar/src/bar.c.o   -c bar/src/bar.c
-$ cc -fPIC -shared -Wl,-soname,libbar.so -o build/bar/libbar.so build/bar/src/bar.c.o
+$ cc -DPRIVATE_BAR=3 -DPUBLIC_BAR=1 -Ibar/include -Ibar/src  -std=c99 -o build/bar/src/bar.c.o   -c bar/src/bar.c
 ```
 
 ```
-$ cc -DINTERFACE_BAR=2 -DPUBLIC_BAR=1 -Ifoo/include -Ifoo/src -Ibar/include  -std=c99 -o build/foo/src/foo.c.o -c foo/src/foo.c
+$ cc -DINTERFACE_BAR=2 -DPUBLIC_BAR=1 -Ifoo/include -Ifoo/src -Ibar/include  -std=c99 -o build/foo/src/foo.c.o   -c foo/src/foo.c
 ```
 
 ```
 $ cc -DINTERFACE_BAR=2 -DPUBLIC_BAR=1 -Ifoo/include -Ibar/include  -std=c99 -o build/main/main.c.o   -c main/main.c
-$ cc build/main/main.c.o build/foo/src/foo.c.o  -o build/main/main  -Wl,-rpath,build/bar build/bar/libbar.so
+$ cc    build/main/main.c.o build/foo/src/foo.c.o /build/bar/src/bar.c.o  -o build/main/main
 ```

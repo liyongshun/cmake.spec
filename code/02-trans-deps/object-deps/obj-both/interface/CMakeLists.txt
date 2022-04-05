@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.14)
+
+project(static-deps-public VERSION 1.0.0 LANGUAGES C CXX)
+
+set(CMAKE_C_STANDARD 99) 
+set(CMAKE_C_STANDARD_REQUIRED ON) 
+set(CMAKE_C_EXTENSIONS OFF)
+
+add_subdirectory(foo)
+add_subdirectory(bar)
+add_subdirectory(main)
+
+include(CMakePrintHelpers)
+
+cmake_print_properties(TARGETS bar foo main 
+  PROPERTIES
+    INCLUDE_DIRECTORIES
+    INTERFACE_INCLUDE_DIRECTORIES
+    COMPILE_DEFINITIONS
+    INTERFACE_COMPILE_DEFINITIONS
+    LINK_LIBRARIES
+    INTERFACE_LINK_LIBRARIES    
+)
