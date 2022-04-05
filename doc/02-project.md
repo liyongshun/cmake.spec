@@ -36,4 +36,7 @@ PROJECT_VERSION, <PROJECT-NAME>_VERSION
 
 ## 语言列表
 
-`LANGUAGES`属性，默认设置为`C CXX`。
+`LANGUAGES`属性，默认为`C CXX`。
+
+## Example
+
