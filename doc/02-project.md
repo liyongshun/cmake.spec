@@ -34,9 +34,15 @@ PROJECT_VERSION, <PROJECT-NAME>_VERSION
 
 如果该项目为顶级项目(TOP_LEVEL)，则设置变量`CMAKE_PROJECT_VERSION`。
 
-## 语言列表
+## 语言
 
 `LANGUAGES`属性，默认为`C CXX`。
 
-## Example
+## 目录
+
+```
+CMAKE_SOURCE_DIR
+CMAKE_BINARY_DIR
+```
+
 
