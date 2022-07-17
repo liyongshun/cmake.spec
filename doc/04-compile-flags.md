@@ -31,7 +31,8 @@ add_library(relaxedReq STATIC ...)
 # Save the original set of flags so we can restore them later 
 set(oldCxxFlags "${CMAKE_CXX_FLAGS}")
 
-# This library has stringent build requirements, so enforce them just for it alone # WARNING: This doesn't do what it may appear to do! 
+# This library has strong build requirements, so enforce them just for it alone 
+# WARNING: This doesn't do what it may appear to do! 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror") 
 add_library(strictReq STATIC ...)
 

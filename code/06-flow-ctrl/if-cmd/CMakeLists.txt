@@ -1,3 +1,8 @@
+set(foo)
+
+if(DEFINED foo)
+  message("-------- foo is defined")
+endif()
 
 macro(assert_true exp)
   if(NOT ${exp})
@@ -57,13 +62,20 @@ assert_true(enable_yyy)
 assert_false("string")
 assert_false("")
 
-set(defined_var "non-empty-value")
-assert_false("${defined_var}")
+set(defined_var_with_value "none-value")
+assert_false("${defined_var_with_value}")
 
-set(defined_var "")
-assert_false("${defined_var}")
+set(defined_var_with_empty_value "")
+assert_false("${defined_var_with_empty_value}")
 
 assert_false("${non_defined_var}")
 
 set(defined_var "non-empty-value")
 assert_false(${defined_var})
+
+set(defined_var "TRUE")
+assert_true(${defined_var})
+
+if(GNU STREQUAL "GNU")
+  message(FATAL_ERROR "expect ${GNU} be true, but got false")
+endif()
