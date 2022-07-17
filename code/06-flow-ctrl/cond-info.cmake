@@ -1,5 +1,0 @@
-set(v1 OFF)
-set(v2 "hello")
-if(NOT (v1 OR "v2"))
-  message("expect false")
-endif()

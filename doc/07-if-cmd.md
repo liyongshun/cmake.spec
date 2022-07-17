@@ -23,20 +23,27 @@ while(cond)
 if(<unquoted_constant>)
 ```
 
-- 不带双引号的逻辑常量(unquoted_constants)：大小写不敏感
-  - 逻辑负的常量：0, FALSE, NO, N, OFF, IGNORE, -NOTFOUND结尾的字符串, 空字符串 => false
-  - 逻辑正的常量：非零整数，TRUE, YES, Y, ON => true
+- 不带双引号的逻辑常量：大小写不敏感
+  - 0, FALSE, NO, N, OFF, IGNORE, -NOTFOUND结尾的字符串, 空字符串 => false
+  - 非零整数，TRUE, YES, Y, ON => true
 
 ```cmake
-if(<unquoted_variable|quoted_string>)
+if(<unquoted_variable>)
 ```
 
-- 不带双引号的变量(unquoted_variables)：
-  - 如果该变量的**值**为逻辑负的常量值 => false
+- 不带双引号的变量：
+  - 如果该变量的**值**为逻辑假的常量值 => false
   - 否则 => true
-- 带双引号的字符串 => false
 
 特殊地，**不带双引号的、且未定义的变量**，其值为空字符串，所以为false. 
+
+```cmake
+if(<quoted_string>)
+```
+
+- 带双引号的字符串 => false
+- 除非字符串的值为真值常量 => true
+
 
 ```cmake
 macro(assert_true exp)
@@ -95,6 +102,7 @@ assert_false(${defined_var})
 ```cmake
 set(var1 OFF)
 set(var2 "var1")
+
 if(${var2}) # => false
 if(var2)    # => true
 ```

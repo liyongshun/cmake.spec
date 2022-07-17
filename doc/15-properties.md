@@ -45,44 +45,29 @@ INTERFACE_SOURCES
 ## Build Specification
 
 ```
-target_include_directories(name
-  PRIVATE
-)
-
-target_compile_definitions(name
-  PRIVATE
-)
-
-target_compile_options(name
-  PRIVATE  
-)
-
-target_compile_features(name
-  PRIVATE  
-)
-
-target_link_directories(name
-  PRIVATE  
-)
-
-target_sources(name
-  PRIVATE  
-)
+target_include_directories(target_name PRIVATE)
+target_compile_definitions(target_name PRIVATE)
+target_compile_options(target_name PRIVATE)
+target_compile_features(target_name PRIVATE)
+target_link_directories(target_name PRIVATE)
+target_link_libraries(target_name PRIVATE)
+target_sources(target_name PRIVATE)
 ```
 
 ```
 INCLUDE_DIRECTORIES
-
 COMPILE_DEFINITIONS
 COMPILE_OPTIONS
 COMPILE_FEATURES
-
 LINK_DIRECTORIES
 LINK_LIBRARIES
-
-POSITION_INDEPENDENT_CODE
 SOURCES
 ```
+
+"Everything that is needed to use that target."
+"As a dependency of another target."
+
+POSITION_INDEPENDENT_CODE
 
 ## Usage Requirements & Build Specification
 
