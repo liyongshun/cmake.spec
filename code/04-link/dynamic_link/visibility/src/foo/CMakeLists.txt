@@ -1,27 +1,37 @@
-project(bar VERSION 1.0.0)
+project(foo VERSION 1.0.0)
 
-add_library(${PROJECT_NAME} STATIC)
+add_library(${PROJECT_NAME} SHARED)
 
 target_sources(${PROJECT_NAME}
   PRIVATE
-    src/bar.c
+    src/foo.c
 )
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
-  OUTPUT_NAME "infra_${PROJECT_NAME}"
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC
+    infra::bar
 )
 
-add_library(infra::bar ALIAS bar)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  OUTPUT_NAME "infra_${PROJECT_NAME}"
+  SOVERSION ${PROJECT_VERSION}
+)
+
+add_library(infra::foo ALIAS foo)
+
+generate_export_header(${PROJECT_NAME}
+  EXPORT_FILE_NAME ${PROJECT_NAME}/export.h
+)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -31,6 +41,10 @@ install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
 
 install(DIRECTORY include/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}/export.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
 install(EXPORT ${PROJECT_NAME}Targets
